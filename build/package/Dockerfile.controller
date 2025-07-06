@@ -5,9 +5,9 @@ RUN apt install git
 COPY . /go/src/github.com/yandex-cloud/yc-csi-driver
 WORKDIR /go/src/github.com/yandex-cloud/yc-csi-driver
 
-RUN export REVISION=$(git rev-parse HEAD)
+RUN export VERSION=$(git describe --tags --always --dirty)
 
-RUN CGO_ENABLED=0 go build -a -ldflags '-X github.com/yandex-cloud/yc-csi-driver/pkg/version.gitRevision=${REVISION}' \
+RUN CGO_ENABLED=0 go build -a -ldflags '-X github.com/yandex-cloud/yc-csi-driver/pkg/version.version=${VERSION}' \
     -o /go/bin/yc-csi-driver-controller github.com/yandex-cloud/yc-csi-driver/cmd/controller
 
 FROM alpine:3.19

@@ -17,9 +17,9 @@ limitations under the License.
 package version
 
 var (
-	gitRevision string
+	version string
 )
 
-func GitRevision() string {
-	return gitRevision
+func Version() string {
+	return version
 }

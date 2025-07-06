@@ -42,7 +42,7 @@ func (i *Identity) GetPluginInfo(ctx context.Context, req *csi.GetPluginInfoRequ
 
 	return &csi.GetPluginInfoResponse{
 		Name:          name,
-		VendorVersion: version.GitRevision(),
+		VendorVersion: version.Version(),
 	}, nil
 }
 
