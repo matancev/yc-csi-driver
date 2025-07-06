@@ -18,22 +18,33 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
 
 	"github.com/yandex-cloud/yc-csi-driver/cmd"
 	"github.com/yandex-cloud/yc-csi-driver/pkg/server/node"
+	"github.com/yandex-cloud/yc-csi-driver/pkg/version"
 
 	"k8s.io/klog"
 )
 
 func main() {
+	var showVersion bool
+
 	opts := node.DefaultOptions()
 
+	flag.BoolVar(&showVersion, "version", false, "show version")
 	flag.StringVar(&opts.Endpoint, "endpoint", opts.Endpoint, "CSI Endpoint")
 	flag.StringVar(&opts.DriverName, "driver-name", opts.DriverName, "driver name to identify as for the CSI")
 	flag.IntVar(&opts.MaxVolumesPerNode, "max-volumes", opts.MaxVolumesPerNode, "the maximum number of volumes attachable to a node")
 	klog.InitFlags(nil)
 
 	flag.Parse()
+
+	if showVersion {
+		fmt.Println(version.Version())
+		os.Exit(0)
+	}
 
 	srv, err := node.New(opts)
 	if err != nil {

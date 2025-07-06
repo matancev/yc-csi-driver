@@ -562,7 +562,7 @@ func (c *controller) ControllerExpandVolume(ctx context.Context, req *csi.Contro
 		if status.Code(err) == codes.FailedPrecondition {
 			c.inFlight.Insert(util.StringToStringer(volumeID))
 			klog.Infof("Set lock on Volume=%s", volumeID)
-			return nil, status.Errorf(status.Code(err), "Error updating volume=%s, %+v", volumeID, err)
+			return nil, status.Errorf(codes.Aborted, "Error updating volume=%s, %+v", volumeID, err)
 		}
 		return nil, status.Errorf(codes.Internal, "Error updating volume=%s, %+v", volumeID, err)
 	}

@@ -19,18 +19,22 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
+
+	"k8s.io/klog"
 
 	"github.com/yandex-cloud/yc-csi-driver/cmd"
 	"github.com/yandex-cloud/yc-csi-driver/pkg/server/controller"
-
-	"k8s.io/klog"
+	"github.com/yandex-cloud/yc-csi-driver/pkg/version"
 )
 
 var (
 	endpoint, cloudFolderID, saKeyFilePath, ycAPIEndpoint string
+	showVersion                                           bool
 )
 
 func init() {
+	flag.BoolVar(&showVersion, "version", false, "show version")
 	flag.StringVar(&endpoint, "endpoint", "unix://tmp/csi.sock", "CSI Endpoint")
 	flag.StringVar(&ycAPIEndpoint, "yc-api-endpoint", "api.cloud.yandex.net:443",
 		"cloud compute API endpoint")
@@ -42,6 +46,11 @@ func main() {
 	klog.InitFlags(nil)
 
 	flag.Parse()
+
+	if showVersion {
+		fmt.Println(version.Version())
+		os.Exit(0)
+	}
 
 	err := run()
 	if err != nil {
